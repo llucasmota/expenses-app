@@ -1,8 +1,6 @@
 import 'dart:math';
-
-import 'package:expenses/components/transaction_form.dart';
+import './components/transaction_form.dart';
 import 'package:expenses/components/transaction_list.dart';
-import 'package:expenses/components/transaction_user.dart';
 import 'package:expenses/models/transaction.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +13,15 @@ class ExpensesApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MyHomePage(),
+      theme: ThemeData(
+          primarySwatch: Colors.purple,
+          accentColor: Colors.amber,
+          fontFamily: 'Quicksand',
+          appBarTheme: AppBarTheme(
+              titleTextStyle: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500))),
     );
   }
 }
@@ -28,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _transactions = [
     Transaction(
         id: 'one',
-        title: 'Novo Tênis de COrrida',
+        title: 'Novo Tênis de Corrida',
         value: 310.76,
         date: DateTime.now()),
     Transaction(
@@ -48,10 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _transactions.add(newTransaction);
     });
+
+    Navigator.of(context).pop();
   }
 
   _openTransactionFormModal(BuildContext context) {
-    showBottomSheet(
+    showModalBottomSheet(
         context: context,
         builder: (_) {
           return TransactionForm(_addTransaction);
@@ -63,29 +72,28 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Despesas Pessoais'),
-        actions: <Widget>[IconButton(onPressed: () {}, icon: Icon(Icons.add))],
+        actions: <Widget>[
+          IconButton(
+              onPressed: () => _openTransactionFormModal(context),
+              icon: Icon(Icons.add))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Container(
-                child: const Card(
-                  color: Colors.blue,
-                  elevation: 5,
-                  child: Text('Gráfico'),
-                ),
-              ),
-              Column(
-                children: <Widget>[
-                  TransactionList(_transactions),
-                  TransactionForm(_addTransaction)
-                ],
-              )
+              // Container(
+              //   child: const Card(
+              //     color: Colors.blue,
+              //     elevation: 5,
+              //     child: Text('Gráfico'),
+              //   ),
+              // ),
+              TransactionList(_transactions),
             ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => _openTransactionFormModal(context),
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
