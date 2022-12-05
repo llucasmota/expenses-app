@@ -34,12 +34,13 @@ class _TransactionFormState extends State<TransactionForm> {
             TextField(
                 controller: titleController,
                 onSubmitted: (_) => _submitForm(),
-                decoration: InputDecoration(labelText: 'Título')),
+                decoration: const InputDecoration(labelText: 'Título')),
             TextField(
                 controller: valueController,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 onSubmitted: (_) => _submitForm(),
-                decoration: InputDecoration(labelText: 'Valor (R\$)')),
+                decoration: const InputDecoration(labelText: 'Valor (R\$)')),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
