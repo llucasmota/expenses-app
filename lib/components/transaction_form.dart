@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
-  final void Function(String, double) onSubmit;
+  final void Function(String, double, DateTime) onSubmit;
   TransactionForm(this.onSubmit);
 
   @override
@@ -13,14 +14,32 @@ class _TransactionFormState extends State<TransactionForm> {
 
   final valueController = TextEditingController();
 
+  DateTime _selectDate = DateTime.now();
+
   _submitForm() {
     final title = titleController.text;
     final value = double.tryParse(valueController.text) ?? 0.0;
 
-    if (title.isEmpty || value <= 0) {
+    if (title.isEmpty || value <= 0 || _selectDate == null) {
       return;
     }
-    widget.onSubmit(title, value);
+    widget.onSubmit(title, value, _selectDate);
+  }
+
+  _showDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2019),
+            lastDate: DateTime.now())
+        .then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectDate = pickedDate;
+      });
+    });
   }
 
   @override
@@ -41,13 +60,39 @@ class _TransactionFormState extends State<TransactionForm> {
                     const TextInputType.numberWithOptions(decimal: true),
                 onSubmitted: (_) => _submitForm(),
                 decoration: const InputDecoration(labelText: 'Valor (R\$)')),
+            Container(
+              height: 70,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    _selectDate == null
+                        ? 'Nenhuma data selecionada!'
+                        : 'Data Formatada: ${DateFormat('dd/M/y').format(_selectDate)}',
+                  ),
+                  TextButton(
+                    onPressed: _showDatePicker,
+                    child: Text(
+                      'Selecionar Data',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    style: TextButton.styleFrom(
+                        primary: Theme.of(context).primaryColor),
+                  )
+                ],
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(
-                  onPressed: _submitForm(),
-                  child: Text('Nova Transação'),
-                  style: TextButton.styleFrom(primary: Colors.purple),
+                ElevatedButton(
+                  onPressed: _submitForm,
+                  child: const Text(
+                    'Nova Transação',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.purple)),
                 ),
               ],
             ),
