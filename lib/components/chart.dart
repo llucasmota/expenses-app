@@ -39,7 +39,8 @@ class Chart extends StatelessWidget {
  * pega a primeirta letra do dia
  */
       return {'day': DateFormat.E().format(weekDay)[0], 'value': totalSum};
-    });
+      //reversed utilizado para que os dias mais atuais fiquem no início
+    }).reversed.toList();
   }
 
   double get _weekTotalValue {
@@ -63,7 +64,9 @@ class Chart extends StatelessWidget {
               child: ChartBar(
                   label: '${trGrouped['day']}',
                   value: double.parse('${trGrouped['value']}'),
-                  percentage: (trGrouped['value'] as double) / _weekTotalValue),
+                  percentage: _weekTotalValue == 0
+                      ? 0
+                      : (trGrouped['value'] as double) / _weekTotalValue),
             );
           }).toList(),
         ),
