@@ -114,8 +114,17 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       actions: <Widget>[
         IconButton(
-            onPressed: () => _openTransactionFormModal(context),
-            icon: Icon(Icons.add))
+          onPressed: () => _openTransactionFormModal(context),
+          icon: Icon(Icons.add),
+        ),
+        IconButton(
+          icon: Icon(_showChart ? Icons.list : Icons.show_chart_outlined),
+          onPressed: () {
+            setState(() {
+              _showChart = !_showChart;
+            });
+          },
+        )
       ],
     );
 
@@ -123,45 +132,40 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
+    final isLandscapeOrientation =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Exibir Gráfico'),
-                  Switch(
-                      value: _showChart,
-                      onChanged: (value) {
-                        setState(() {
-                          _showChart = value;
-                        });
-                      })
-                ],
-              ),
-              if (_showChart)
+              // if (isLandscapeOrientation)
+              //   Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: <Widget>[
+              //       Text('Exibir Gráfico'),
+              //       Switch(
+              //           value: _showChart,
+              //           onChanged: (value) {
+              //             setState(() {
+              //               _showChart = value;
+              //             });
+              //           })
+              //     ],
+              //   ),
+              if (_showChart || !isLandscapeOrientation)
                 Container(
-                  child: const Card(
-                    color: Colors.blue,
-                    elevation: 5,
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text('Gráfico'),
-                    ),
-                  ),
+                  height:
+                      availableHeight * (isLandscapeOrientation ? 0.7 : 0.3),
+                  child: Chart(_recentTransactions),
                 ),
               if (!_showChart)
                 Container(
-                  height: availableHeight * 0.30,
-                  child: Chart(_recentTransactions),
+                  height: availableHeight * 0.75,
+                  child: TransactionList(_transactions, _deleteTransaction),
                 ),
-              Container(
-                height: availableHeight * 0.75,
-                child: TransactionList(_transactions, _deleteTransaction),
-              ),
             ]),
       ),
       floatingActionButton: FloatingActionButton(
