@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:expenses/models/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -45,8 +47,9 @@ class TransactionList extends StatelessWidget {
                       radius: 30,
                       child: Padding(
                         padding: const EdgeInsets.all(6.0),
-                        child:
-                            FittedBox(child: Text('R\$${transaction.value}')),
+                        child: FittedBox(
+                          child: Text('R\$${transaction.value}'),
+                        ),
                       ),
                     ),
                     title: Text(
@@ -55,11 +58,19 @@ class TransactionList extends StatelessWidget {
                     ),
                     subtitle:
                         Text(DateFormat('d MMM y').format(transaction.date)),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Theme.of(context).errorColor,
-                      onPressed: () => onRemove(transaction.id),
-                    ),
+                    trailing: MediaQuery.of(context).size.width > 480
+                        ? TextButton.icon(
+                            onPressed: () => onRemove(transaction.id),
+                            icon: Icon(Icons.delete),
+                            label: Text('Excluir'),
+                            style: TextButton.styleFrom(
+                                foregroundColor: Theme.of(context).errorColor),
+                          )
+                        : IconButton(
+                            icon: Icon(Icons.delete),
+                            color: Theme.of(context).errorColor,
+                            onPressed: () => onRemove(transaction.id),
+                          ),
                   ));
             },
           );
