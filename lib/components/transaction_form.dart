@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:expenses/components/adaptative_button.dart';
+import 'package:expenses/components/adaptative_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -59,16 +61,23 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
           child: Column(
             children: <Widget>[
-              TextField(
-                  controller: titleController,
-                  onSubmitted: (_) => _submitForm(),
-                  decoration: const InputDecoration(labelText: 'Título')),
-              TextField(
-                  controller: valueController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  onSubmitted: (_) => _submitForm(),
-                  decoration: const InputDecoration(labelText: 'Valor (R\$)')),
+              AdaptativeTextField(
+                  onSubmittedForm: (_) => _submitForm,
+                  keyboardType: TextInputType.text,
+                  textController: titleController,
+                  label: 'Título'),
+
+              AdaptativeTextField(
+                  onSubmittedForm: (_) => _submitForm(),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  textController: valueController,
+                  label: 'Valor (R\$)'),
+              // TextField(
+              //     controller: valueController,
+              //     keyboardType:
+              //         const TextInputType.numberWithOptions(decimal: true),
+              //     onSubmitted: (_) => _submitForm,
+              //     decoration: const InputDecoration(labelText: 'Valor (R\$)')),
               Container(
                 height: 70,
                 child: Row(
@@ -93,17 +102,19 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.purple)),
-                    child: const Text(
-                      'Nova Transação',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                children: <Widget>[
+                  AdaptativeButton(
+                      label: 'Nova Transação', onPressed: _submitForm)
+                  // ElevatedButton(
+                  //   onPressed: _submitForm,
+                  //   style: const ButtonStyle(
+                  //       backgroundColor:
+                  //           MaterialStatePropertyAll(Colors.purple)),
+                  //   child: const Text(
+                  //     'Nova Transação',
+                  //     style: TextStyle(color: Colors.white),
+                  //   ),
+                  // ),
                 ],
               ),
             ],
