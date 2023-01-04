@@ -41,6 +41,7 @@ class AdaptativeTextField extends StatelessWidget {
             ),
           )
         : TextField(
+            style: TextStyle(color: Colors.black),
             controller: textController,
             keyboardType: keyboardType,
             onSubmitted: onSubmittedForm,
