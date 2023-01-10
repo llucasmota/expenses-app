@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(String, double, DateTime) onSubmit;
-  TransactionForm(this.onSubmit);
+  const TransactionForm(this.onSubmit, {super.key});
 
   @override
   _TransactionFormState createState() => _TransactionFormState();
@@ -16,10 +16,23 @@ class TransactionForm extends StatefulWidget {
 
 class _TransactionFormState extends State<TransactionForm> {
   final titleController = TextEditingController();
-
   final valueController = TextEditingController();
-
   DateTime _selectDate = DateTime.now();
+
+  _TransactionFormState() {
+    print('Constructor _TransactionFormState');
+  }
+  @override
+  void initState() {
+    super.initState();
+    print('initState() _TransactionFormState');
+  }
+
+  @override
+  void didUpdateWidget(TransactionForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    print('didUpdateWidget() _TransactionFormState');
+  }
 
   _submitForm() {
     final title = titleController.text;
@@ -29,22 +42,6 @@ class _TransactionFormState extends State<TransactionForm> {
       return;
     }
     widget.onSubmit(title, value, _selectDate);
-  }
-
-  _showDatePicker() {
-    showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2019),
-            lastDate: DateTime.now())
-        .then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-      setState(() {
-        _selectDate = pickedDate;
-      });
-    });
   }
 
   _onDateChanged(DateTime dateTime) {
@@ -84,28 +81,6 @@ class _TransactionFormState extends State<TransactionForm> {
                 onDateChanged: _onDateChanged,
                 selectDate: _selectDate,
               ),
-              // Container(
-              //   height: 70,
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: <Widget>[
-              //       Text(
-              //         _selectDate == null
-              //             ? 'Nenhuma data selecionada!'
-              //             : 'Data Formatada: ${DateFormat('dd/M/y').format(_selectDate)}',
-              //       ),
-              //       TextButton(
-              //         onPressed: _showDatePicker,
-              //         style: TextButton.styleFrom(
-              //             foregroundColor: Theme.of(context).primaryColor),
-              //         child: Text(
-              //           'Selecionar Data',
-              //           style: TextStyle(fontWeight: FontWeight.bold),
-              //         ),
-              //       )
-              //     ],
-              //   ),
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[

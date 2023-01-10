@@ -52,31 +52,48 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transaction> _transactions = [
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Novo Tênis de Corrida',
-        value: 10190.76,
-        date: DateTime.now().subtract(Duration(days: 0))),
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Novo Tênis casual',
-        value: 810.71,
-        date: DateTime.now().subtract(Duration(days: 1))),
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Novo Tênis casual',
-        value: 3310.71,
-        date: DateTime.now().subtract(Duration(days: 4))),
-    Transaction(
-        id: Random().nextDouble().toString(),
-        title: 'Novo Tênis casual',
-        value: 10.71,
-        date: DateTime.now().subtract(Duration(days: 5))),
+    // Transaction(
+    //     id: Random().nextDouble().toString(),
+    //     title: 'Novo Tênis de Corrida',
+    //     value: 10190.76,
+    //     date: DateTime.now().subtract(Duration(days: 0))),
+    // Transaction(
+    //     id: Random().nextDouble().toString(),
+    //     title: 'Novo Tênis casual',
+    //     value: 810.71,
+    //     date: DateTime.now().subtract(Duration(days: 1))),
+    // Transaction(
+    //     id: Random().nextDouble().toString(),
+    //     title: 'Novo Tênis casual',
+    //     value: 3310.71,
+    //     date: DateTime.now().subtract(Duration(days: 4))),
+    // Transaction(
+    //     id: Random().nextDouble().toString(),
+    //     title: 'Novo Tênis casual',
+    //     value: 10.71,
+    //     date: DateTime.now().subtract(Duration(days: 5))),
   ];
 
   bool _showChart = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
